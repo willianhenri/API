@@ -12,17 +12,30 @@ app.use(cors())
 
 
 app.post('/user', async (req, res) => {
+    const { email, name, age } = req.body;
 
-    const user = await prisma.user.create({
-        data: {
-            email: req.body.email,
-            name: req.body.name,
-            age: req.body.age
-        }
-    })
+    // Validações
+    if (!email || !validator.isEmail(email)) {
+        return res.status(400).json({ error: 'Formato de e-mail inválido' });
+    }
+    if (!name || typeof name !== 'string') {
+        return res.status(400).json({ error: 'Nome inválido' });
+    }
+    if (typeof age !== 'number' || age < 0) {
+        return res.status(400).json({ error: 'Idade inválida' });
+    }
 
-    res.status(201).json(user);
-})
+    try {
+        const user = await prisma.user.create({
+            data: { email, name, age }
+        });
+        res.status(201).json(user);
+    } catch (error) {
+        console.error('Erro ao criar usuário:', error);
+        res.status(500).json({ error: 'Erro ao criar usuário' });
+    }
+});
+
 
 app.get('/user', async (req, res) => {
     
