@@ -9,6 +9,7 @@ const app = express();
 app.use(express.json());
 app.use(cors())
 
+import validator from 'validator';
 
 
 app.post('/user', async (req, res) => {
