@@ -77,15 +77,13 @@ app.put('/user/:id', async (req, res) => {
 })
 
 app.delete('/user/:id', async (req, res) => {
-    await prisma.user.delete({
-        where: {
-            id: req.params.id
-        }
-    })
-
-    res.status(200).json({ message: "Usuario deletado com sucesso" });
-
-})
+    const { id } = req.params;
+    await prisma.user.update({
+        where: { id },
+        data: { deleted: true }
+    });
+    res.status(204).send();
+});
 
 app.listen(3000)
 

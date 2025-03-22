@@ -18,4 +18,5 @@ model User {
   email   String   @unique
   name    String
   age     Int
+  deleted Boolean @default(false)
 }
