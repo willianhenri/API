@@ -1,0 +1,5 @@
+{
+    "terminal.integrated.defaultProfile.windows": "Command Prompt",
+    "terminal.integrated.focusAfterRun": "terminal",
+    "terminal.integrated.tabs.defaultColor": "terminal.ansiCyan"
+}
