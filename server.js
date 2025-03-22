@@ -8,42 +8,22 @@ const prisma = new PrismaClient()
 const app = express();
 app.use(express.json());
 app.use(cors())
-const validator = require('validator');
 
 
 
 app.post('/user', async (req, res) => {
-    const { email, name, age } = req.body; // Extrai os dados do corpo da requisição
 
-    // Validação do e-mail usando validator.js
-    if (!validator.isEmail(email)) {
-        return res.status(400).json({ error: 'Formato de e-mail inválido' });
-    }
+    const user = await prisma.user.create({
+        data: {
+            email: req.body.email,
+            name: req.body.name,
+            age: req.body.age
+        }
+    })
 
-    // Validação básica de idade (opcional)
-    if (typeof age !== 'number' || age < 0) {
-        return res.status(400).json({ error: 'Idade inválida' });
-    }
+    res.status(201).json(user);
+})
 
-    // Validação básica de nome (opcional)
-    if (!name || typeof name !== 'string') {
-        return res.status(400).json({ error: 'Nome inválido' });
-    }
-
-    try {
-        const user = await prisma.user.create({
-            data: {
-                email,
-                name,
-                age
-            }
-        });
-
-        res.status(201).json(user);
-    } catch (error) {
-        res.status(500).json({ error: 'Erro ao criar usuário' });
-    }
-});
 app.get('/user', async (req, res) => {
     
     let users = []
